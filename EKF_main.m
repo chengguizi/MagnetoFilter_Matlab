@@ -47,7 +47,19 @@ U=0;
 for step = 2: size (mat_azimuth,1)
     X = EKF_azimuth{step-1, 2};
     P = EKF_azimuth{step-1, 3};
-    LP = EKF_azimuth{step-1,1}*0.95 + mat_azimuth(step,2)*0.05;
+    
+    LP1 = EKF_azimuth{step-1,1};
+    LP2 = mat_azimuth(step,2);
+    
+    if abs(LP1 - LP2) > pi/2
+        if LP2 > LP1
+            LP2 = LP2 - pi*2;
+        else
+            LP2 = LP2 + pi*2;
+        end
+    end
+    LP = LP1*0.95 + LP2*0.05;
+    LP = mod(LP,pi*2);
     t_delta = mat_azimuth(step,1) - mat_azimuth(step-1,1);
     
     
