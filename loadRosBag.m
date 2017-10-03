@@ -1,7 +1,7 @@
 function mat_result_div4 = loadRosBag(filePath)
 
-if true
-    filePath = '/home/dhl/Desktop/mag/2017-10-02-14-26-44.bag'
+if ~exist('filePath')
+    filePath = '/home/dhl/Desktop/mag/2017-10-02-14-26-44.bag';
 end
 
 bag = rosbag(filePath);
