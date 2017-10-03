@@ -6,7 +6,6 @@ classdef CustomMsgConsts
     %   Copyright 2014-2017 The MathWorks, Inc.
     
     properties (Constant)
-        ssf_core_visensor_imu = 'ssf_core/visensor_imu'
         visensor_node_visensor_imu = 'visensor_node/visensor_imu'
     end
     
@@ -17,9 +16,8 @@ classdef CustomMsgConsts
             
             persistent msgList
             if isempty(msgList)
-                msgList = cell(2, 1);
-                msgList{1} = 'ssf_core/visensor_imu';
-                msgList{2} = 'visensor_node/visensor_imu';
+                msgList = cell(1, 1);
+                msgList{1} = 'visensor_node/visensor_imu';
             end
             
             messageList = msgList;
