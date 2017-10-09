@@ -19,7 +19,7 @@ function [X_next , P_next , K] = EKFupdate(X,P,U,Z,t_delta)
     % G is local-linearised F
     % for this model, F is actually linear
     Q = [ 1e-6 , 0 ; 0 , 3e-4];
-    P_hat = F*P*(F.') + Q
+    P_hat = F*P*(F.') + Q;
     
     % H is the transformation from sensor reading to state
     % Z_expected = H*X_hat
