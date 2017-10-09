@@ -3,7 +3,7 @@ function output = OnlineEKF_main()
 
     rosshutdown;
     clear;
-    rosinit();
+    rosinit;
     close all;
 
     %clc
@@ -71,7 +71,7 @@ function output = OnlineEKF_main()
         
         xlim(fs3,[time_grid1 time_grid1+10 ]);
         
-        height = 90;
+        height = 20;
         mid = EKFstate(last).theta*180/pi;
         low = fix(mid/height);
         ylim( fs3,[ (low*height - height*0.2)  (low*height+height*1.2)]);

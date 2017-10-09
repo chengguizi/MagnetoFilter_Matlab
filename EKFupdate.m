@@ -18,7 +18,10 @@ function [X_next , P_next , K] = EKFupdate(X,P,U,Z,t_delta)
     % P_hat = G*P*G.' + Q
     % G is local-linearised F
     % for this model, F is actually linear
-    Q = [ 1e-6 , 0 ; 0 , 3e-4];
+    cov_theta = (t_delta * 0.08)^2;
+    cov_omega = (t_delta * 0.16)^2;
+    [cov_theta cov_omega]
+    Q = [ cov_theta , 0 ; 0 , cov_omega];
     P_hat = F*P*(F.') + Q;
     
     % H is the transformation from sensor reading to state
@@ -27,7 +30,7 @@ function [X_next , P_next , K] = EKFupdate(X,P,U,Z,t_delta)
     H = [ 1 0 ]; % direct feeding of theta to expected Z
     
     % Kalman Gain
-    R = 1e-2;
+    R = 0.8e-3;
     K = P_hat*(H.')*inv(H*P_hat*(H.') + R);
     
     Z_expected = H*X_hat;
