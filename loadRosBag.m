@@ -1,13 +1,19 @@
 function mat_result_div4 = loadRosBag(filePath)
 
 if ~exist('filePath')
-    filePath = '/home/dhl/Desktop/mag/2017-10-02-14-26-44.bag';
+    if isunix
+        filePath = '/home/dhl/Desktop/mag/2017-10-02-14-26-44.bag';
+    elseif ispc 
+        filePath = 'D:\TLAB_Work\2017-09-20-10-13-12.bag';
+    else
+        disp('Not Supported');
+    end
 end
 disp('Loading Logbag...');
 
 bag = rosbag(filePath);
 
-bag.AvailableTopics;
+bag.AvailableTopics
 
 bagSelect1 = select(bag,'Topic','/cust_imu0')
 

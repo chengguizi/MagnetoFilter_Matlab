@@ -26,7 +26,7 @@ function [X_next , P_next , K] = EKFupdate(X,P,U,Z,t_delta)
     
     H = [ 1 0 ]; % direct feeding of theta to expected Z
     
-    % Karman Gain
+    % Kalman Gain
     R = 1e-2;
     K = P_hat*(H.')*inv(H*P_hat*(H.') + R);
     
