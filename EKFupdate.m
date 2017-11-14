@@ -5,23 +5,19 @@
 % t_delta (rad/sec)
 
 
-function [X_next , P_next , K] = EKFupdate(X,P,U,Z,t_delta)
+function [X_next , P_next , K] = EKFupdate(X,P,Q,R,U,Z,t_delta)
 
     % X_hat = F*X + B*U    the predicted state, based on previous state and
     % input
     F = [1  t_delta ; 0  1 ];
     B = [ 0 ; t_delta];
     X_hat =  F*X + B*U;
-    X_hat(1) = mod ( X_hat(1), 2*pi);
+    %%%X_hat(1) = mod ( X_hat(1), 2*pi);
     
     
     % P_hat = G*P*G.' + Q
     % G is local-linearised F
     % for this model, F is actually linear
-    cov_theta = (t_delta * 0.08)^2;
-    cov_omega = (t_delta * 0.16)^2;
-    [cov_theta cov_omega]
-    Q = [ cov_theta , 0 ; 0 , cov_omega];
     P_hat = F*P*(F.') + Q;
     
     % H is the transformation from sensor reading to state
@@ -30,23 +26,22 @@ function [X_next , P_next , K] = EKFupdate(X,P,U,Z,t_delta)
     H = [ 1 0 ]; % direct feeding of theta to expected Z
     
     % Kalman Gain
-    R = 0.8e-3;
     K = P_hat*(H.')*inv(H*P_hat*(H.') + R);
     
     Z_expected = H*X_hat;
     % if Z jumps at boundary condition at 0 or 360 degree
-    if ( abs(Z - Z_expected) > pi/2)
-       
-        if (Z > Z_expected)
-            Z = Z - 2*pi;
-        else
-            Z = Z + 2*pi;
-        end
-        
-    end
+%     if ( abs(Z - Z_expected) > pi/2)
+%        
+%         if (Z > Z_expected)
+%             Z = Z - 2*pi;
+%         else
+%             Z = Z + 2*pi;
+%         end
+%         
+%     end
      
     X_next = X_hat + K*( Z - Z_expected );
-    X_next (1) = mod (X_next (1),2*pi);
+    %X_next (1) = mod (X_next (1),2*pi);
     
     P_next = P_hat - K*H*P_hat;
     
