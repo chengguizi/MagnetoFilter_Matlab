@@ -25,12 +25,18 @@ for step = 2: size (sys,1)
     X = EKF_azimuth{step-1, 2};
     P = EKF_azimuth{step-1, 3};
     
+    
     LP1 = EKF_azimuth{step-1,1};
     LP2 = sys(step,2); % new measurement
     
     LP = LP1*LPk + LP2*(1-LPk);
     
-    [X_next , P_next , K] = EKFupdate(X,P,Q,R,U,sys(step,2),t_delta);
+    % X = [ direction (rad) ; rotation (rad/sec) ]
+    % P = [ cov( direction ) 0 ; 0 cov (rotation) ]
+    % U = 0
+    % Z = direction (rad)
+    % t_delta (rad/sec)
+    [X_next , P_next , K] = EKFupdate(X,P,Q,R,U,sys(step,2),F,B);
     
     EKF_azimuth (end+1, :) = { LP , X_next , P_next , K};
 end
@@ -56,13 +62,16 @@ A_K1 = A_K(1:2:end,:);
 A_K2 = A_K(2:2:end,:);
 
 
+
 figure(2)
 plot(A_K1);
 hold on
 plot(A_K2);
+legend('EKF K1 (Angle)','EKF K2 (Rate)');
 
 figure(3)
 plot(A_EKF2);
+legend('EKF Estimate Rate');
 
 
 %%% save as CSV %%%

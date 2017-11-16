@@ -7,6 +7,10 @@ R = 0.8e-3; % sensor noise
 U=0;
 
 
+F = [1  t_delta ; 0  1 ];
+B = [ 0 ; t_delta];
+
+
 
 %%%%% Low Pass filter%%%%
 

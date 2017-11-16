@@ -1,19 +1,12 @@
-% X = [ direction (rad) ; rotation (rad/sec) ]
-% P = [ cov( direction ) 0 ; 0 cov (rotation) ]
-% U = 0
-% Z = direction (rad)
-% t_delta (rad/sec)
+% P = covariance, updated by EKF
+% Q = state noise (external uncertainties)
+% R = measurement noise
 
-
-function [X_next , P_next , K] = EKFupdate(X,P,Q,R,U,Z,t_delta)
+function [X_next , P_next , K] = EKFupdate(X,P,Q,R,U,Z,F,B)
 
     % X_hat = F*X + B*U    the predicted state, based on previous state and
     % input
-    F = [1  t_delta ; 0  1 ];
-    B = [ 0 ; t_delta];
     X_hat =  F*X + B*U;
-    %%%X_hat(1) = mod ( X_hat(1), 2*pi);
-    
     
     % P_hat = G*P*G.' + Q
     % G is local-linearised F
@@ -29,21 +22,9 @@ function [X_next , P_next , K] = EKFupdate(X,P,Q,R,U,Z,t_delta)
     K = P_hat*(H.')*inv(H*P_hat*(H.') + R);
     
     Z_expected = H*X_hat;
-    % if Z jumps at boundary condition at 0 or 360 degree
-%     if ( abs(Z - Z_expected) > pi/2)
-%        
-%         if (Z > Z_expected)
-%             Z = Z - 2*pi;
-%         else
-%             Z = Z + 2*pi;
-%         end
-%         
-%     end
      
     X_next = X_hat + K*( Z - Z_expected );
-    %X_next (1) = mod (X_next (1),2*pi);
     
     P_next = P_hat - K*H*P_hat;
-    
 
 end
