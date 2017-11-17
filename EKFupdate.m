@@ -1,6 +1,12 @@
+% X = state vector
 % P = covariance, updated by EKF
 % Q = state noise (external uncertainties)
 % R = measurement noise
+% U = input vector
+% Z = measurement vector
+% F = state update matrix
+% B = input conversion matrix
+% H = state to measurement conversion matrix
 
 function [X_next , P_next , K] = EKFupdate(X,P,Q,R,U,Z,F,B)
 
@@ -11,7 +17,7 @@ function [X_next , P_next , K] = EKFupdate(X,P,Q,R,U,Z,F,B)
     % P_hat = G*P*G.' + Q
     % G is local-linearised F
     % for this model, F is actually linear
-    P_hat = F*P*(F.') + Q;
+    P_hat = F*P*(F') + Q;
     
     % H is the transformation from sensor reading to state
     % Z_expected = H*X_hat
@@ -19,7 +25,7 @@ function [X_next , P_next , K] = EKFupdate(X,P,Q,R,U,Z,F,B)
     H = [ 1 0 ]; % direct feeding of theta to expected Z
     
     % Kalman Gain
-    K = P_hat*(H.')*inv(H*P_hat*(H.') + R);
+    K = P_hat*(H')*inv(H*P_hat*(H') + R);
     
     Z_expected = H*X_hat;
      

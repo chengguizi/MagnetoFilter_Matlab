@@ -43,11 +43,12 @@ Mz = preProcssedData(:,4);
 %plot(T,Mx,T,Mz);
 
 sys0 = azimuth(Mx,Mz);
-sys = [ T , azimuth(Mx,Mz) ];
+sys = [ T , zeros(size(T)) ];
 
 
 rN = 0;
 
+sys(1,2) = sys0(1);
 for i = 2:size(sys,1)
     if (sys0(i) - sys0(i-1) < -pi) % current value fold over
         rN = rN + 1;
