@@ -8,11 +8,18 @@
 % B = input conversion matrix
 % H = state to measurement conversion matrix
 
-function [X_next , P_next , K] = EKFupdate(X,P,Q,R,U,Z,F,B,H)
+function [X_next , P_next , K] = EKFupdate(X,P,Q,R,U,Z,F,B,H,has_measurment)
 
     % X_hat = F*X + B*U    the predicted state, based on previous state and
     % input
     X_hat =  F*X + B*U;
+    
+    if (~has_measurment)
+        X_next = X_hat;
+        P_next = P;
+        K = 0;
+        return;
+    end
     
     % P_hat = G*P*G.' + Q
     % G is local-linearised F
