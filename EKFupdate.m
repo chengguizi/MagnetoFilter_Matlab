@@ -8,7 +8,7 @@
 % B = input conversion matrix
 % H = state to measurement conversion matrix
 
-function [X_next , P_next , K] = EKFupdate(X,P,Q,R,U,Z,F,B)
+function [X_next , P_next , K] = EKFupdate(X,P,Q,R,U,Z,F,B,H)
 
     % X_hat = F*X + B*U    the predicted state, based on previous state and
     % input
@@ -19,14 +19,10 @@ function [X_next , P_next , K] = EKFupdate(X,P,Q,R,U,Z,F,B)
     % for this model, F is actually linear
     P_hat = F*P*(F') + Q;
     
-    % H is the transformation from sensor reading to state
-    % Z_expected = H*X_hat
-    
-    H = [ 1 0 ]; % direct feeding of theta to expected Z
-    
     % Kalman Gain
     K = P_hat*(H')*inv(H*P_hat*(H') + R);
     
+    % H is the transformation from sensor reading to state
     Z_expected = H*X_hat;
      
     X_next = X_hat + K*( Z - Z_expected );

@@ -9,7 +9,7 @@ U=0;
 
 F = [1  t_delta ; 0  1 ];
 B = [ 0 ; t_delta];
-
+H = [ 1 0 ]; % direct feeding of theta to expected Z
 
 
 %%%%% Low Pass filter%%%%

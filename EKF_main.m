@@ -40,7 +40,7 @@ for step = 2: N
     % U = 0
     % Z = direction (rad)
     % t_delta (rad/sec)
-    [X_next , P_next , K] = EKFupdate(X,P,Q,R,U,Z,F,B);
+    [X_next , P_next , K] = EKFupdate(X,P,Q,R,U,Z,F,B,H);
     
     ekf (end+1, :) = { LP , X_next , P_next , K};
 end
