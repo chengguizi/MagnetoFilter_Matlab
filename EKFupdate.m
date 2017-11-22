@@ -16,8 +16,9 @@ function [X_next , P_next , K] = EKFupdate(X,P,Q,R,U,Z,F,B,H,has_measurment)
     
     if (~has_measurment)
         X_next = X_hat;
-        P_next = P;
-        K = 0;
+        P_hat = F*P*(F')+ Q;
+        K = P_hat*(H')/(H*P_hat*(H') + R);
+        P_next = P_hat;
         return;
     end
     
@@ -27,7 +28,7 @@ function [X_next , P_next , K] = EKFupdate(X,P,Q,R,U,Z,F,B,H,has_measurment)
     P_hat = F*P*(F') + Q;
     
     % Kalman Gain
-    K = P_hat*(H')*inv(H*P_hat*(H') + R);
+    K = P_hat*(H')/(H*P_hat*(H') + R);
     
     % H is the transformation from sensor reading to state
     Z_expected = H*X_hat;
