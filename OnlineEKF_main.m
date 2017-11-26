@@ -135,14 +135,22 @@ function subCallbackMagneto (source,poseMagData)
     % U = 0
     % Z = direction (rad)
     % t_delta (rad/sec)
-
+    
     X = [ EKFstate(loopcount-1).theta ; EKFstate(loopcount-1).omega ];
     P = EKFstate(loopcount-1).cov;
     U = 0;
     Z = sensorReading(loopcount).theta;
     t_delta = EKFstate(loopcount).delta;
-
-    [X_next , P_next , K] = EKFupdate(X,P,U,Z,t_delta);
+    F = [1  t_delta ; 0  1 ];
+    B = [ 0 ; t_delta];
+    H = [ 1 0 ];
+    R = 0.8e-3;
+    cov_theta = (t_delta * 0.08)^2;
+    cov_omega = (t_delta * 0.16)^2;
+    Q = [ cov_theta , 0 ; 0 , cov_omega];
+    
+    % X,P,Q,R,U,Z,F,B,H,has_measurment
+    [X_next , P_next , K] = EKFupdate(X,P,Q,R,U,Z,F,B,H,t_delta);
 
     EKFstate(loopcount).theta = X_next(1,1);
     EKFstate(loopcount).omega = X_next(2,1);
