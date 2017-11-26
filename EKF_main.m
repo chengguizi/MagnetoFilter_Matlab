@@ -55,6 +55,7 @@ A_EKF = cell2mat(ekf(:,2));
 A_EKF1 = A_EKF (1:2:end,:);
 A_EKF2 = A_EKF (2:2:end,:);
 
+subplot(211)
 plot(A_raw);
 hold on
 plot(A_EKF1);
@@ -65,6 +66,10 @@ A_K = cell2mat(ekf(:,4));
 A_K1 = A_K(1:2:end,:);
 A_K2 = A_K(2:2:end,:);
 
+subplot(212)
+plot(A_EKF2);
+legend('EKF Estimate Rate');
+
 
 
 figure(2)
@@ -73,9 +78,9 @@ hold on
 plot(A_K2);
 legend('EKF K1 (Angle)','EKF K2 (Rate)');
 
-figure(3)
-plot(A_EKF2);
-legend('EKF Estimate Rate');
+% figure(3)
+% plot(A_EKF2);
+% legend('EKF Estimate Rate');
 
 
 %%% save as CSV %%%
